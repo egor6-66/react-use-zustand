@@ -1,2 +1,4 @@
+import useZustand, { Wrapper } from './bin';
 
-export default {}
+export type { Wrapper };
+export default useZustand;
