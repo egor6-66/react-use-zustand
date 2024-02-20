@@ -2,7 +2,7 @@
   "name": "react-use-zustand",
   "version": "1.0.3",
   "description": "",
-  "main": "dist/main.js",
+  "main": "./dist/index.js",
   "scripts": {
     "pub": "webpack && npm version patch && git push origin main && npm publish",
     "webpack": "webpack"
@@ -12,6 +12,10 @@
     "react",
     "hook"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/egor6-66/react-use-zustand"
+  },
   "author": "Egor Raybul",
   "license": "ISC",
   "devDependencies": {
@@ -39,5 +43,8 @@
   "peerDependencies": {
     "react": "*",
     "zustand": "^4.5.1"
-  }
+  },
+  "files": [
+    "dist"
+  ]
 }
