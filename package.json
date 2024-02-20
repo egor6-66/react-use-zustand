@@ -14,10 +14,6 @@
   ],
   "author": "Egor Raybul",
   "license": "ISC",
-  "dependencies": {
-    "immer": "^10.0.3",
-    "zustand": "^4.5.1"
-  },
   "devDependencies": {
     "@types/react": "^18.0.33",
     "@typescript-eslint/eslint-plugin": "^5.42.1",
@@ -37,9 +33,11 @@
     "react": "^18.2.0",
     "ts-loader": "^9.5.1",
     "typescript": "^5.3.3",
-    "webpack-cli": "^5.0.1"
+    "webpack-cli": "^5.0.1",
+    "zustand": "^4.5.1"
   },
   "peerDependencies": {
-    "react": "*"
+    "react": "*",
+    "zustand": "^4.5.1"
   }
 }
