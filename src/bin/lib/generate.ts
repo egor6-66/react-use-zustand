@@ -67,7 +67,9 @@ const generate = <T>(keys?: any[], defaultValue?: any, forStorage?: ForStorage<T
                 callback(updater).then((res: any) => {
                     set((state: any) => {
                         state[key].value = res;
-                        storageFn(key, () => storage.set(key, res));
+                        if (!storage.get(key)) {
+                            storageFn(key, () => storage.set(key, res));
+                        }
                     });
                 });
             }
