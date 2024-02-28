@@ -55,7 +55,9 @@ const generate = <T>(keys?: any[], defaultValue?: any, forStorage?: ForStorage<T
 
     if (defaultValue) {
         Object.entries(defaultValue).forEach(([key, value]: any) => {
-            storageFn(key, () => storage.set(key, value));
+            if (!storage.get(key)) {
+                storageFn(key, () => storage.set(key, value));
+            }
         });
     }
 
