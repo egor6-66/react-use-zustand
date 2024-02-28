@@ -6,14 +6,18 @@ const generate = <T>(keys?: any[], defaultValue?: any, forStorage?: ForStorage<T
 
     const storage = useStorage({ storageName: forStorage?.storageName, storage: forStorage?.storage });
 
+    const storageFn = (key: keyof T, cb: () => void) => {
+        if ((forStorage?.keys?.includes(key) || forStorage?.all) && typeof key === 'string') {
+            cb();
+        }
+    };
+
     const updater = (obj: any) => {
         Object.entries(obj).forEach(([thisKey, value]: any) => {
             set((state: any) => {
                 if (state) {
                     state[thisKey].value = value;
-                    if ((forStorage?.keys?.includes(thisKey) || forStorage?.all) && typeof thisKey === 'string') {
-                        storage.set(thisKey, value);
-                    }
+                    storageFn(thisKey, () => storage.set(thisKey, value));
                 }
             });
         });
@@ -29,16 +33,13 @@ const generate = <T>(keys?: any[], defaultValue?: any, forStorage?: ForStorage<T
                 set: (value: any) =>
                     set((state: any) => {
                         state[key].value = value;
-                        if ((forStorage?.keys?.includes(key) || forStorage?.all) && typeof key === 'string') {
-                            storage.set(key, value);
-                        }
+                        console.log(key);
+                        storageFn(key, () => storage.set(key, value));
                     }),
                 clear: () =>
                     set((state: any) => {
                         state[key].value = def;
-                        if ((forStorage?.keys?.includes(key) || forStorage?.all) && typeof key === 'string') {
-                            storage.remove(key, def);
-                        }
+                        storageFn(key, () => storage.remove(key, def));
                     }),
             };
 
@@ -52,15 +53,19 @@ const generate = <T>(keys?: any[], defaultValue?: any, forStorage?: ForStorage<T
             }
         });
 
+    if (defaultValue) {
+        Object.entries(defaultValue).forEach(([key, value]: any) => {
+            storageFn(key, () => storage.set(key, value));
+        });
+    }
+
     if (asyncDefault) {
         Object.entries(asyncDefault).forEach(([key, callback]: any) => {
             if (!obj[key].value) {
                 callback(updater).then((res: any) => {
                     set((state: any) => {
                         state[key].value = res;
-                        if ((forStorage?.keys?.includes(key) || forStorage?.all) && typeof key === 'string') {
-                            storage.set(key, res);
-                        }
+                        storageFn(key, () => storage.set(key, res));
                     });
                 });
             }
