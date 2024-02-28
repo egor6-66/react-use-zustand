@@ -64,14 +64,15 @@ const generate = <T>(keys?: any[], defaultValue?: any, forStorage?: ForStorage<T
     if (asyncDefault) {
         Object.entries(asyncDefault).forEach(([key, callback]: any) => {
             if (!obj[key].value) {
-                callback(updater).then((res: any) => {
-                    set((state: any) => {
-                        state[key].value = res;
-                        if (!storage.get(key)) {
+                if (!storage.get(key)) {
+                    callback(updater).then((res: any) => {
+                        set((state: any) => {
+                            state[key].value = res;
+
                             storageFn(key, () => storage.set(key, res));
-                        }
+                        });
                     });
-                });
+                }
             }
         });
     }
