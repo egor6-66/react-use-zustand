@@ -27,13 +27,11 @@ const generate = <T>(keys?: any[], defaultValue?: any, forStorage?: ForStorage<T
         keys.forEach((key) => {
             const valueInStorage = storage.get(key as string);
             const def = defaultValue ? (defaultValue[key] === undefined ? undefined : defaultValue[key]) : undefined;
-
             obj[key] = {
-                value: valueInStorage || def,
+                value: valueInStorage !== undefined ? valueInStorage : def,
                 set: (value: any) =>
                     set((state: any) => {
                         state[key].value = value;
-                        console.log(key);
                         storageFn(key, () => storage.set(key, value));
                     }),
                 clear: () =>
@@ -55,7 +53,7 @@ const generate = <T>(keys?: any[], defaultValue?: any, forStorage?: ForStorage<T
 
     if (defaultValue) {
         Object.entries(defaultValue).forEach(([key, value]: any) => {
-            if (!storage.get(key)) {
+            if (storage.get(key) === undefined) {
                 storageFn(key, () => storage.set(key, value));
             }
         });
@@ -64,11 +62,10 @@ const generate = <T>(keys?: any[], defaultValue?: any, forStorage?: ForStorage<T
     if (asyncDefault) {
         Object.entries(asyncDefault).forEach(([key, callback]: any) => {
             if (!obj[key].value) {
-                if (!storage.get(key)) {
+                if (storage.get(key) === undefined) {
                     callback(updater).then((res: any) => {
                         set((state: any) => {
                             state[key].value = res;
-
                             storageFn(key, () => storage.set(key, res));
                         });
                     });
