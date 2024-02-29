@@ -1,4 +1,4 @@
-import useZustand, { Wrapper } from './bin';
+import useZustand, { Wrapper, AllTypes } from './bin';
 
-export type { Wrapper };
+export type { Wrapper, AllTypes };
 export default useZustand;

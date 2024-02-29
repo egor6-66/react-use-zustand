@@ -22,6 +22,10 @@ type AsyncDefault<T> = {
     [K in keyof T]: (updater: (obj: Partial<T>) => void) => Promise<T[K]>;
 };
 
+type AllTypes<T> = {
+    [K in keyof T]: T[K] extends () => any ? ReturnType<T[K]> : never;
+};
+
 type Props<T, M> = {
     keys: Array<keyof T>;
     default?: Partial<T>;
@@ -42,5 +46,5 @@ function useZustand<T extends object, M extends Partial<Record<keyof T, Record<s
     return createSelectors(store);
 }
 
-export type { Wrapper };
+export type { Wrapper, AllTypes };
 export default useZustand;
