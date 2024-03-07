@@ -7,7 +7,7 @@ import generate from './lib/generate';
 import { ForStorage, Wrapper } from './types';
 
 type Wrap<T, M = any> = {
-    [K in keyof T]: K extends keyof M ? Wrapper<T[K]> & M[K] : Wrapper<T[K]>;
+    [K in keyof Required<T>]: K extends keyof M ? Wrapper<T[K]> & M[K] : Wrapper<T[K]>;
 };
 
 type WrapWithoutCustomMethods<T> = {
