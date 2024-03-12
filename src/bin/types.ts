@@ -1,8 +1,4 @@
-export type PrimitiveTypes = string | number | boolean | null | Date | undefined;
-
-export type FilterByType<T, Type> = {
-    [P in keyof T as T[P] extends Type | undefined ? P : never]: T[P];
-};
+import { arrayMethods } from './lib';
 
 export type Storage = 'LocalStorage' | 'sessionStorage';
 
@@ -11,10 +7,4 @@ export type ForStorage<T> = {
     keys?: Array<keyof T>;
     storage?: Storage;
     all?: boolean;
-};
-
-export type Wrapper<T> = {
-    value: T;
-    set: (arg: T) => void;
-    clear: () => void;
 };
