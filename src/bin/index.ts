@@ -6,7 +6,6 @@ import { arrayMethods, createSelectors } from './lib';
 import generate from './lib/generate';
 import useStorage from './lib/use-storage';
 import { ForStorage } from './types';
-import store from '../../../lib/store';
 
 type UnArray<T> = T extends Array<infer U> ? U : T;
 
