@@ -17,7 +17,7 @@ type Base<T> = {
 
 type ArrayMethods<T> = ReturnType<typeof arrayMethods<T>>;
 
-type Wrapper<T> = T extends Array<any> ? Base<T> & ArrayMethods<UnArray<T>> : Base<T>;
+type Wrapper<T> = Base<T>;
 
 type Wrap<T, M = any, D = any> = {
     [K in keyof Required<T>]: K extends keyof M ? Wrapper<T[K]> & M[K] : Wrapper<T[K]>;
