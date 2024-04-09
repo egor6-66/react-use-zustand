@@ -1,10 +1,12 @@
-import { create } from 'zustand';
+import { create, StoreApi, UseBoundStore } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
 import { arrayMethods, createSelectors } from './lib';
 import generate from './lib/generate';
+import useStorage from './lib/use-storage';
 import { ForStorage } from './types';
+import store from '../../../lib/store';
 
 type UnArray<T> = T extends Array<infer U> ? U : T;
 
@@ -13,12 +15,6 @@ type Base<T> = {
     set: (arg: T) => void;
     clear: () => void;
 };
-
-type ArrayKeys<T> = {
-    [K in keyof T]: Array<any> extends T[K] ? K : never;
-}[keyof T];
-
-type OnlyArrayRequired<T extends object> = Partial<T> & Pick<Required<T>, ArrayKeys<T>>;
 
 type ArrayMethods<T> = ReturnType<typeof arrayMethods<T>>;
 
@@ -44,22 +40,37 @@ type StoreTypes<T> = {
     [K in keyof T]: T[K] extends () => any ? ReturnType<T[K]> : never;
 };
 
-type Props<T extends object, M> = {
+type Props<T, M> = {
     keys: Array<keyof T>;
-    default: OnlyArrayRequired<T>;
+    default?: Partial<T>;
     asyncDefault?: Partial<AsyncDefault<T>>;
     methods?: Met<T, M>;
     forStorage?: ForStorage<T>;
 };
 
 function useZustand<T extends object, M extends Partial<Record<keyof T, Record<string, any>>> = {}>(props: Props<T, M>) {
+    const storage = useStorage({ storageName: props.forStorage?.storageName, storage: props.forStorage?.storage });
+
+    const storageFn = (key: keyof T, cb: () => void) => {
+        if ((props.forStorage?.keys?.includes(key) || props.forStorage?.all) && typeof key === 'string') {
+            cb();
+        }
+    };
+
     const store = create<Wrap<T, M, typeof props.default>>()(
         devtools(
             immer((set, getState) => {
                 return generate<T>(props.keys, props?.default, props?.forStorage, props.methods, props.asyncDefault, set, getState);
             }) as any
         )
-    );
+    ) as UseBoundStore<StoreApi<Wrap<T, M, Partial<T> | undefined>>> & { setStateOutsideComponent: (initStore: Partial<T>) => void };
+
+    store.setStateOutsideComponent = (initStore) => {
+        Object.entries(initStore).forEach(([key, value]) => {
+            store.setState((prev: any) => ({ [key]: { ...prev[key], value } } as any));
+            storageFn(key as keyof T, () => storage.set(key, value));
+        });
+    };
 
     return createSelectors(store);
 }
