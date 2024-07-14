@@ -1,5 +1,3 @@
-'use client';
-
 import createSelectors from './create-selectors';
 import useStorage from './use-storage';
 

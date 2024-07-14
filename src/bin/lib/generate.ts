@@ -1,5 +1,3 @@
-'use client';
-
 import useStorage from './use-storage';
 import { ForStorage } from '../types';
 

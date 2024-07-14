@@ -1,5 +1,3 @@
-'use client';
-
 import { create, StoreApi, UseBoundStore } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
