@@ -9,7 +9,7 @@ module.exports = {
         path: path.resolve(__dirname, 'dist'),
         libraryTarget: 'umd',
         clean: true,
-        globalObject: "typeof self !== 'undefined' ? self : this",
+        globalObject: 'this'
     },
     resolve: {
         extensions: ['.ts', '.tsx', '.js'],
