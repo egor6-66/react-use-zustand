@@ -1,21 +1,19 @@
+'use client';
+
 import { create, StoreApi, UseBoundStore } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-import { arrayMethods, createSelectors } from './lib';
+import { createSelectors } from './lib';
 import generate from './lib/generate';
 import useStorage from './lib/use-storage';
 import { ForStorage } from './types';
-
-type UnArray<T> = T extends Array<infer U> ? U : T;
 
 type Base<T> = {
     value: T;
     set: (arg: T) => void;
     clear: () => void;
 };
-
-type ArrayMethods<T> = ReturnType<typeof arrayMethods<T>>;
 
 type Wrapper<T> = Base<T>;
 

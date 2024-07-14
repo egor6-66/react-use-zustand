@@ -1,5 +1,6 @@
-import arrayMethods from './array-methods';
+'use client';
+
 import createSelectors from './create-selectors';
 import useStorage from './use-storage';
 
-export { createSelectors, useStorage, arrayMethods };
+export { createSelectors, useStorage };

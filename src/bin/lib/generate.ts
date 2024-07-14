@@ -1,7 +1,8 @@
+'use client';
+
 import useStorage from './use-storage';
 import { ForStorage } from '../types';
 
-import { arrayMethods } from './index';
 
 const generate = <T>(keys?: any[], defaultValue?: any, forStorage?: ForStorage<T>, methods?: any, asyncDefault?: any, set?: any, getState?: any) => {
     const obj: Record<any, any> = {};
@@ -49,14 +50,6 @@ const generate = <T>(keys?: any[], defaultValue?: any, forStorage?: ForStorage<T
                     ...methods[key](() => {
                         return { state: getState(), updater };
                     }),
-                };
-            }
-
-            if (Array.isArray(obj[key]?.value)) {
-                const methods = arrayMethods(getState, set, key, storageFn, storage);
-                obj[key] = {
-                    ...obj[key],
-                    ...methods,
                 };
             }
         });

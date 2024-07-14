@@ -1,5 +1,3 @@
-import { arrayMethods } from './lib';
-
 export type Storage = 'LocalStorage' | 'sessionStorage';
 
 export type ForStorage<T> = {

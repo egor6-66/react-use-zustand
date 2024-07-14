@@ -1,3 +1,5 @@
+'use client';
+
 import { Storage } from '../types';
 
 type Props = {

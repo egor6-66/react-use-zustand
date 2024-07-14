@@ -1,3 +1,5 @@
+'use client';
+
 import useZustand, { StoreTypes } from './bin';
 
 export type { StoreTypes };
