@@ -55,13 +55,6 @@ function useZustand<T extends object, M extends Partial<Record<keyof T, Record<s
         )
     ) as UseBoundStore<StoreApi<Wrap<T, M, Partial<T> | undefined>>> & { setStateOutsideComponent: (initStore: Partial<T>) => void };
 
-    // store.setStateOutsideComponent = (initStore) => {
-    //     Object.entries(initStore).forEach(([key, value]) => {
-    //         store.setState((prev: any) => ({ [key]: { ...prev[key], value } } as any));
-    //         storageFn(key as keyof T, () => storage.set(key, value));
-    //     });
-    // };
-
     store.setStateOutsideComponent = (initStore) => {
         Object.entries(initStore).forEach(([key, value]) => {
             store.setState((prev: any) => ({ [key]: { ...prev[key], value } } as any));
