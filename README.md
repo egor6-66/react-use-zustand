@@ -1,4 +1,4 @@
-# 💾 react-use-file-uploader
+# 💾 react-use-zustand
 
 ![version](https://img.shields.io/github/package-json/v/egor6-66/react-use-zustand)
 ![stars](https://img.shields.io/github/stars/egor6-66/react-use-zustand?style=social)
@@ -58,20 +58,20 @@ import baseStore from './stores/base';
 function App() {
   const counter = baseStore.use.counter();
   const tree = baseStore.use.tree();
-
-  const updatePrimitive = () => {
+  
+  const mutatePrimitive = () => {
     counter.set((prev) => ++prev);
   };
 
-  const mutatePrimitive = () => {
+  const updatePrimitive = () => {
     counter.set(1000);
   };
-
-  const updateObject = () => {
+  
+  const mutateObject = () => {
     tree.set((prev) => { ++prev.node.counter });
   };
 
-  const mutateObject = () => {
+  const updateObject = () => {
     tree.set({ node: { counter: 100000 } });
   };
 
