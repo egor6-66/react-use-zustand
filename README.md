@@ -194,7 +194,7 @@ interface User {
   name: string;
 }
 
-interface StoreWithStorage {
+interface Store {
   users: Array<User>;
 }
 
@@ -204,7 +204,7 @@ interface Methods {
   };
 }
 
-const storeWithStorage = useZustand<StoreWithStorage, Methods>({
+const storeWithStorage = useZustand<Store, Methods>({
   keys: ['users'],
   default: {
     users: [],
@@ -218,8 +218,7 @@ const storeWithStorage = useZustand<StoreWithStorage, Methods>({
     }),
   },
   forStorage: {
-    all: true,
-    storageName: 'test',
+    storageName: 'users',
   },
 });
 
