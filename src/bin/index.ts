@@ -9,7 +9,7 @@ import { ForStorage } from './types';
 
 type Base<T> = {
     value: T;
-    set: (arg: T) => void;
+    set: (arg: T | ((value: T) => any)) => void;
     clear: () => void;
 };
 
@@ -24,11 +24,7 @@ type WrapWithoutCustomMethods<T> = {
 };
 
 type Met<T, M> = {
-    [K in keyof M]: (use: () => { state: WrapWithoutCustomMethods<T>; updater: (obj: Partial<T>) => void }) => M[K];
-};
-
-type AsyncDefault<T> = {
-    [K in keyof T]: (updater: (obj: Partial<T>) => void) => Promise<T[K]>;
+    [K in keyof M]: (getState: () => WrapWithoutCustomMethods<T>) => M[K];
 };
 
 type StoreTypes<T> = {
@@ -38,7 +34,6 @@ type StoreTypes<T> = {
 type Props<T, M> = {
     keys: Array<keyof T>;
     default?: Partial<T>;
-    asyncDefault?: Partial<AsyncDefault<T>>;
     methods?: Met<T, M>;
     forStorage?: ForStorage<T>;
 };
@@ -55,10 +50,17 @@ function useZustand<T extends object, M extends Partial<Record<keyof T, Record<s
     const store = create<Wrap<T, M, typeof props.default>>()(
         devtools(
             immer((set, getState) => {
-                return generate<T>(props.keys, props?.default, props?.forStorage, props.methods, props.asyncDefault, set, getState);
+                return generate<T>(props.keys, props?.default, props?.forStorage, props.methods, set, getState);
             }) as any
         )
     ) as UseBoundStore<StoreApi<Wrap<T, M, Partial<T> | undefined>>> & { setStateOutsideComponent: (initStore: Partial<T>) => void };
+
+    // store.setStateOutsideComponent = (initStore) => {
+    //     Object.entries(initStore).forEach(([key, value]) => {
+    //         store.setState((prev: any) => ({ [key]: { ...prev[key], value } } as any));
+    //         storageFn(key as keyof T, () => storage.set(key, value));
+    //     });
+    // };
 
     store.setStateOutsideComponent = (initStore) => {
         Object.entries(initStore).forEach(([key, value]) => {

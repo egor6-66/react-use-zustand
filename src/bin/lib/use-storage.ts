@@ -6,12 +6,11 @@ type Props = {
 };
 
 function useStorage(props: Props) {
-
     if (typeof window === 'undefined') {
         return { set: () => '', get: () => '', remove: () => '' };
     }
 
-    const storage = !props?.storage ? window.localStorage : props?.storage === 'LocalStorage' ? window.localStorage : window.sessionStorage;
+    const storage = !props?.storage ? window.localStorage : props?.storage === 'localStorage' ? window.localStorage : window.sessionStorage;
 
     const get = (key: string) => {
         if (props.storageName) {

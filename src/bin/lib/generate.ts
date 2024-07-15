@@ -1,8 +1,7 @@
 import useStorage from './use-storage';
 import { ForStorage } from '../types';
 
-
-const generate = <T>(keys?: any[], defaultValue?: any, forStorage?: ForStorage<T>, methods?: any, asyncDefault?: any, set?: any, getState?: any) => {
+const generate = <T>(keys?: any[], defaultValue?: any, forStorage?: ForStorage<T>, methods?: any, immerSet?: any, getState?: any) => {
     const obj: Record<any, any> = {};
 
     const storage = useStorage({ storageName: forStorage?.storageName, storage: forStorage?.storage });
@@ -13,30 +12,33 @@ const generate = <T>(keys?: any[], defaultValue?: any, forStorage?: ForStorage<T
         }
     };
 
-    const updater = (obj: any) => {
-        Object.entries(obj).forEach(([thisKey, value]: any) => {
-            set((state: any) => {
-                if (state) {
-                    state[thisKey].value = value;
-                    storageFn(thisKey, () => storage.set(thisKey, value));
-                }
-            });
-        });
-    };
-
     keys &&
         keys.forEach((key) => {
             const valueInStorage = storage.get(key as string);
             const def = defaultValue ? (defaultValue[key] === undefined ? undefined : defaultValue[key]) : undefined;
             obj[key] = {
                 value: valueInStorage !== undefined ? valueInStorage : def,
-                set: (value: any) =>
-                    set((state: any) => {
-                        state[key].value = value;
-                        storageFn(key, () => storage.set(key, value));
-                    }),
+                set: (arg: any) => {
+                    if (typeof arg === 'function') {
+                        immerSet((state: any) => {
+                            if (typeof state[key].value === 'object') {
+                                arg(state[key].value);
+                                storageFn(key, () => storage.set(key, state[key].value));
+                            } else {
+                                const res = arg(state[key].value);
+                                state[key].value = res;
+                                storageFn(key, () => storage.set(key, res));
+                            }
+                        });
+                    } else {
+                        immerSet((state: any) => {
+                            state[key].value = arg;
+                            storageFn(key, () => storage.set(key, arg));
+                        });
+                    }
+                },
                 clear: () =>
-                    set((state: any) => {
+                    immerSet((state: any) => {
                         state[key].value = def;
                         storageFn(key, () => storage.remove(key, def));
                     }),
@@ -45,9 +47,7 @@ const generate = <T>(keys?: any[], defaultValue?: any, forStorage?: ForStorage<T
             if (methods && typeof methods[key] === 'function') {
                 obj[key] = {
                     ...obj[key],
-                    ...methods[key](() => {
-                        return { state: getState(), updater };
-                    }),
+                    ...methods[key](getState),
                 };
             }
         });
@@ -56,21 +56,6 @@ const generate = <T>(keys?: any[], defaultValue?: any, forStorage?: ForStorage<T
         Object.entries(defaultValue).forEach(([key, value]: any) => {
             if (storage.get(key) === undefined) {
                 storageFn(key, () => storage.set(key, value));
-            }
-        });
-    }
-
-    if (asyncDefault) {
-        Object.entries(asyncDefault).forEach(([key, callback]: any) => {
-            if (!obj[key].value) {
-                if (storage.get(key) === undefined) {
-                    callback(updater).then((res: any) => {
-                        set((state: any) => {
-                            state[key].value = res;
-                            storageFn(key, () => storage.set(key, res));
-                        });
-                    });
-                }
             }
         });
     }

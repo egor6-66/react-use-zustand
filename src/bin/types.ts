@@ -1,4 +1,4 @@
-export type Storage = 'LocalStorage' | 'sessionStorage';
+export type Storage = 'localStorage' | 'sessionStorage';
 
 export type ForStorage<T> = {
     storageName: string;
