@@ -1,5 +1,6 @@
-import useStorage from './use-storage';
 import { ForStorage } from '../types';
+
+import useStorage from './use-storage';
 
 const generate = <T>(keys?: any[], defaultValue?: any, forStorage?: ForStorage<T>, methods?: any, immerSet?: any, getState?: any) => {
     const obj: Record<any, any> = {};
@@ -16,6 +17,7 @@ const generate = <T>(keys?: any[], defaultValue?: any, forStorage?: ForStorage<T
         keys.forEach((key) => {
             const valueInStorage = storage.get(key as string);
             const def = defaultValue ? (defaultValue[key] === undefined ? undefined : defaultValue[key]) : undefined;
+
             obj[key] = {
                 value: valueInStorage !== undefined ? valueInStorage : def,
                 set: (arg: any) => {
@@ -26,6 +28,7 @@ const generate = <T>(keys?: any[], defaultValue?: any, forStorage?: ForStorage<T
                                 storageFn(key, () => storage.set(key, state[key].value));
                             } else {
                                 const res = arg(state[key].value);
+
                                 state[key].value = res;
                                 storageFn(key, () => storage.set(key, res));
                             }

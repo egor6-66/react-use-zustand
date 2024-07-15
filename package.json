@@ -5,7 +5,11 @@
   "main": "./dist/index.js",
   "scripts": {
     "pub": "webpack && npm version patch && git push origin main && npm publish",
-    "webpack": "webpack"
+    "webpack": "webpack",
+    "lint": "eslint .",
+    "lint:fix": "npx eslint ./src --fix",
+    "typecheck": "tsc",
+    "prepare": "husky"
   },
   "keywords": [
     "zustand",

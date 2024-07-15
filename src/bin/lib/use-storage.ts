@@ -15,8 +15,10 @@ function useStorage(props: Props) {
     const get = (key: string) => {
         if (props.storageName) {
             const valueInStorage = storage.getItem(props.storageName);
+
             if (valueInStorage) {
                 const parse = JSON.parse(valueInStorage);
+
                 return parse[key];
             }
         }
@@ -25,8 +27,10 @@ function useStorage(props: Props) {
     const set = (key: string, value: any) => {
         if (props.storageName) {
             const valueInStorage = storage.getItem(props.storageName);
+
             if (valueInStorage) {
                 const parse = JSON.parse(valueInStorage);
+
                 storage.setItem(props.storageName, JSON.stringify({ ...parse, [key]: value }));
             } else {
                 storage.setItem(props.storageName, JSON.stringify({ [key]: value }));
@@ -37,8 +41,10 @@ function useStorage(props: Props) {
     const remove = (key: string, defaultValue: any) => {
         if (props.storageName) {
             const valueInStorage = storage.getItem(props.storageName);
+
             if (valueInStorage) {
                 const parse = JSON.parse(valueInStorage);
+
                 parse[key] = defaultValue !== undefined ? defaultValue : undefined;
                 storage.setItem(props.storageName, JSON.stringify(parse));
             }
