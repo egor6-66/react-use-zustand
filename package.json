@@ -8,8 +8,7 @@
     "webpack": "webpack",
     "lint": "eslint .",
     "lint:fix": "npx eslint ./src --fix",
-    "typecheck": "tsc",
-    "prepare": "husky"
+    "typecheck": "tsc"
   },
   "keywords": [
     "zustand",
