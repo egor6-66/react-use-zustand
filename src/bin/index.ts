@@ -66,5 +66,5 @@ function useZustand<T extends object, M extends Partial<Record<keyof T, Record<s
 }
 
 export type { StoreTypes };
-
+ 
 export default useZustand;
