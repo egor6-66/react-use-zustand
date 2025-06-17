@@ -48,7 +48,7 @@
   },
   "peerDependencies": {
     "react": "*",
-    "zustand": "^4.5.1"
+    "zustand": "^5.0.5"
   },
   "files": [
     "dist"
