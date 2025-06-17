@@ -2,10 +2,13 @@
   "name": "react-use-zustand",
   "version": "1.0.29",
   "description": "",
-  "main": "./dist/index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "scripts": {
     "pub": "webpack && npm version patch && git push origin main && npm publish",
     "webpack": "webpack",
+    "vite": "vite build",
     "lint": "eslint .",
     "lint:fix": "npx eslint ./src --fix",
     "typecheck": "tsc"
@@ -22,7 +25,8 @@
   "author": "Egor Raybul",
   "license": "ISC",
   "devDependencies": {
-    "@types/react": "^18.0.33",
+    "@microsoft/api-extractor": "^7.52.8",
+    "@types/react": "^18.3.1",
     "@typescript-eslint/eslint-plugin": "^5.42.1",
     "@typescript-eslint/parser": "^5.42.1",
     "eslint": "^8.27.0",
@@ -40,9 +44,10 @@
     "eslint-plugin-sonarjs": "^1.0.3",
     "eslint-plugin-unicorn": "^54.0.0",
     "prettier": "^2.7.1",
-    "react": "19.1.0",
+    "react": "18.3.1",
     "ts-loader": "^9.5.1",
     "typescript": "~5.7.2",
+    "unplugin-dts": "^1.0.0-beta.1",
     "webpack-cli": "^5.0.1",
     "zustand": "5.0.5"
   },
@@ -52,5 +57,9 @@
   },
   "files": [
     "dist"
-  ]
+  ],
+  "dependencies": {
+    "@vitejs/plugin-react": "^4.5.2",
+    "vite": "^6.3.5"
+  }
 }

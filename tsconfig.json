@@ -1,17 +1,16 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
+    "target": "ESNext",
     "module": "ESNext",
+    "lib": ["es2020", "dom"],
+    "strict": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
+    "skipLibCheck": true,
+    "outDir": "./dist",
     "declaration": true,
-    "jsx": "react",
-    "strict": true,
-    "lib": [ "es2015", "dom" ],
-    "outDir": "./dist/",
-    "sourceMap": true,
-    "allowJs": true
+    "declarationDir": "./dist",
+    "rootDir": "./src"
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist", ".idea"]
+  "include": ["src"]
 }
