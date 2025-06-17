@@ -6,7 +6,7 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
-    "pub": "webpack && npm version patch && git push origin main && npm publish",
+    "pub": "vite build && npm version patch && git push origin main && npm publish",
     "webpack": "webpack",
     "vite": "vite build",
     "lint": "eslint .",
