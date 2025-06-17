@@ -2,9 +2,9 @@ import { create, StoreApi, UseBoundStore } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
+import { createSelectors } from './lib';
 import generate from './lib/generate';
 import useStorage from './lib/use-storage';
-import { createSelectors } from './lib';
 import { ForStorage } from './types';
 
 type Base<T> = {
@@ -66,5 +66,4 @@ function useZustand<T extends object, M extends Partial<Record<keyof T, Record<s
 }
 
 export type { StoreTypes };
-
 export default useZustand;
