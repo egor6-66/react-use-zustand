@@ -53,7 +53,7 @@ function useZustand<T extends object, M extends Partial<Record<keyof T, Record<s
                 return generate<T>(props.keys, props?.default, props?.forStorage, props.methods, set, getState);
             }) as any
         )
-    ) as UseBoundStore<StoreApi<Wrap<T, M, Partial<T> | undefined>>> & { setStateOutsideComponent: (initStore: Partial<T>) => void };
+    ) as unknown as UseBoundStore<StoreApi<Wrap<T, M, Partial<T> | undefined>>> & { setStateOutsideComponent: (initStore: Partial<T>) => void };
 
     store.setStateOutsideComponent = (initStore) => {
         Object.entries(initStore).forEach(([key, value]) => {
@@ -66,5 +66,5 @@ function useZustand<T extends object, M extends Partial<Record<keyof T, Record<s
 }
 
 export type { StoreTypes };
- 
+
 export default useZustand;
